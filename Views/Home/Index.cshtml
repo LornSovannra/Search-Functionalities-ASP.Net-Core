@@ -1,0 +1,60 @@
+﻿@model IEnumerable<Employee>
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div style="margin: 20px auto; justify-content: center; align-items: center;">
+    @if (TempData["SuccessMsg"] != null)
+    {
+            <div class="alert alert-success" role="alert">
+            @TempData["SuccessMsg"]
+            </div>
+    }
+
+    <form class="input-group mb-3" method="GET" asp-action="Index" asp-controller="Home">
+      <input type="text" class="form-control" value="@ViewData["EmployeeFiltered"]" placeholder="Search employee by First Name, Last Name, Gender, Email, Address..." name="search_param">
+      <input class="input-group-text btn btn-primary" type="submit" value="Search" />
+      <a class="btn btn-outline-secondary" asp-action="Index" asp-controller="Home">Get All</a>
+    </form>
+
+    <div class="card text-nowrap">
+        <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
+            <h5>List of Employees</h5>
+            <a class="btn btn-success" asp-controller="Home" asp-action="Create">Create Employee</a>
+        </div>
+        <div style="margin: 10px;">
+            <table class="table table-hover" border="1">
+                <thead>
+                    <tr>
+                        <th scope="col">First Name</th>
+                        <th scope="col">Last Name</th>
+                        <th scope="col">Gender</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Address</th>
+                        @*<th scope="col">Department Name</th>*@
+                        <th scope="col">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var data in Model)
+                    {
+                        <tr>
+                            <td>@data.Fname</td>
+                            <td>@data.Lname</td>
+                            <td>@data.Gender</td>
+                            <td>@data.Email</td>
+                            <td>@data.Address</td>
+                            @*<td>@data.Department.DepartmentName</td>*@
+                            <td class="d-flex gap-2">
+                                <a class="btn btn-warning" asp-controller="Home" asp-action="Edit" asp-route-id="@data.Id">Edit</a>
+                                <form id="form_delete" method="POST" asp-controller="Home" asp-action="Delete" asp-route-id="@data.Id">
+                                    <a onclick="document.getElementById('form_delete').submit();" class="btn btn-danger">Delete</a>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
